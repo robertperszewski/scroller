@@ -6,30 +6,33 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let isThrottled = false;    
 
     document.addEventListener('mousewheel', function (event){
-        
         if (isThrottled) return;
         isThrottled = true;
 
         setTimeout(function(){
             isThrottled = false;
-        }, 750);
-
+        }, 1000);         
         const direction= event.wheelDelta < 0 ? 1 : -1;
+        scroll(direction)
+    })        
+    
+    function scroll(direction){        
         if(direction === 1){  
           const isLast = sections.length-1 === currentSectionIndex;
           if(isLast) return;
 
-        }
-        if(direction === -1){  
+        }else if(direction === -1){  
             const isFirst = 0 === currentSectionIndex;
             if(isFirst) return;
-            }     
-        currentSectionIndex += direction;      
-        console.log(currentSectionIndex)
+        }     
+        currentSectionIndex =currentSectionIndex + direction; 
+        scrollSection();
+    }
+
+    function scrollSection(){
         sections[currentSectionIndex].scrollIntoView({
-            behavior: "smooth",
-            block: "start",
+             behavior: "smooth",
+             block: "start",
         })
-    })
-    
+    }
 })
