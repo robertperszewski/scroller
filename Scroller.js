@@ -1,0 +1,49 @@
+class Scroller{
+    constructor(rootSelector){
+        const rootElement=document.getElementById(rootSelector);
+        this.sections = document.querySelectorAll('section');
+        this.isThrottled = false;   
+        const currentSection=[...this.sections]
+        const currentSectionIndex= currentSection.findIndex((element) => {
+            return this.isScrolledIntoView(element)
+        })
+        this.currentSectionIndex= currentSectionIndex < 0 ? 0 : currentSectionIndex;
+    }
+    isScrolledIntoView(element){
+        const rect = element.getBoundingClientRect();
+        const elemTop= rect.top;
+        const elemBottom= Math.floor(rect.bottom);
+        const isVissible = (elemTop >= 0) && (elemBottom <= window.innerHeight)
+        return isVissible;
+    }
+
+    listenScroll = (event) => {
+        if (this.isThrottled) return;
+        this.isThrottled = true;
+
+        setTimeout(()=>{
+            this.isThrottled = false;
+        }, 1000);         
+        const direction= event.wheelDelta < 0 ? 1 : -1;    
+        this.scroll(direction);
+    }
+    scroll = (direction)=>{            
+        if(direction === 1){  
+          const isLast = this.sections.length-1 === this.currentSectionIndex;
+          if(isLast) return;
+
+        }else if(direction === -1){  
+            const isFirst = 0 === this.currentSectionIndex;
+            if(isFirst) return;
+        }     
+        this.currentSectionIndex =this.currentSectionIndex + direction; 
+        
+        this.scrollSection();
+    }
+    scrollSection=()=>{
+        this.sections[this.currentSectionIndex].scrollIntoView({
+             behavior: "smooth",
+             block: "start",
+        })
+    }
+}
