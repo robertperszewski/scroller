@@ -8,6 +8,8 @@ class Scroller{
             return this.isScrolledIntoView(element)
         })
         this.currentSectionIndex= currentSectionIndex < 0 ? 0 : currentSectionIndex;
+        this.drawNavigation()
+    
     }
     isScrolledIntoView(element){
         const rect = element.getBoundingClientRect();
@@ -26,6 +28,7 @@ class Scroller{
         }, 1000);         
         const direction= event.wheelDelta < 0 ? 1 : -1;    
         this.scroll(direction);
+        
     }
     scroll = (direction)=>{            
         if(direction === 1){  
@@ -45,5 +48,42 @@ class Scroller{
              behavior: "smooth",
              block: "start",
         })
+        this.activeNavigation();
     }
+    drawNavigation=()=>{
+        this.navigationContainer = document.createElement('aside');
+        this.navigationContainer.classList.add('scroller__navigation');
+        const list = document.createElement('ul');
+
+        this.sections.forEach((section, index) =>{            
+            const listItem = document.createElement('li')
+            listItem.addEventListener("click",()=>{
+                this.currentSectionIndex=index;
+                
+                this.scrollSection();
+                
+            })
+            list.appendChild(listItem);
+            
+            
+        })
+        this.navigationContainer.appendChild(list);
+        document.body.appendChild(this.navigationContainer)
+        this.activeNavigation();
+    }
+    activeNavigation=()=>{
+        if(this.navigationContainer){
+            const navigationItems = this.navigationContainer.querySelectorAll("li");
+            navigationItems.forEach((item,index)=>{
+           
+                if(index===this.currentSectionIndex){
+                    item.classList.add('active')
+                }else{
+                    item.classList.remove('active')
+                }
+
+             })
+        }    
+    }
+
 }
