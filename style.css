@@ -4,6 +4,10 @@
 html {
   overflow: hidden; /* Hide scrollbars */
 }
+img {
+  max-width: 100%;
+}
+
 section {
   height: 100vh;
   text-align: center;
